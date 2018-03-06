@@ -38,9 +38,11 @@ class _CTC(Function):
                   costs)
         if size_average:
             # Compute the avg. log-probability per frame and batch sample.
-            costs = torch.FloatTensor([costs.mean()])
+            costs = costs.sum() / costs.size(0)
+            grads = grads / grads.size(0)
         else:
-            costs = torch.FloatTensor([costs.sum()])
+            costs = costs.sum()
+            grads = grads / grads.size(0)
         ctx.grads = Variable(grads)
         return costs
 
